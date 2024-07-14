@@ -29,7 +29,7 @@ export class UserRegistrationService {
     //api call for login endpoint
     console.log(userDetails);
     return this.http
-      .post(apiUrl + 'users', userDetails)
+      .post(apiUrl + 'login', userDetails)
       .pipe(catchError(this.handleError));
   }
 

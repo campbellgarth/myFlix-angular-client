@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserRegistrationService } from './fetch-api-data.service';
+import { MyflixService } from './fetch-api-data.service';
 
 describe('FetchApiDataService', () => {
-  let service: UserRegistrationService;
+  let service: MyflixService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UserRegistrationService);
+    service = TestBed.inject(MyflixService);
   });
 
   it('should be created', () => {

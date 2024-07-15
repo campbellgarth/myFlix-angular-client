@@ -24,10 +24,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { GenreComponent } from './genre/genre.component';
 import { DirectorComponent } from './director/director.component';
 import { DescriptionComponent } from './description/description.component';
+import { AddFavMovieComponent } from './add-fav-movie/add-fav-movie.component';
+import { RemoveFavMovieComponent } from './remove-fav-movie/remove-fav-movie.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 
@@ -41,6 +45,9 @@ const appRoutes: Routes = [
     GenreComponent,
     DirectorComponent,
     DescriptionComponent,
+    AddFavMovieComponent,
+    RemoveFavMovieComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

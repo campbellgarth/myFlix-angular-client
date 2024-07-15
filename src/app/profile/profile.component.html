@@ -1,0 +1,22 @@
+<div class="favorite-movies">
+  <h2>Your Favorite Movies</h2>
+  <mat-card *ngFor="let movie of favoriteMovies" class="movie-container">
+    <mat-card-header>
+      <mat-card-title>{{ movie.Title }}</mat-card-title>
+      <mat-card-subtitle>{{ movie.Year }}</mat-card-subtitle>
+    </mat-card-header>
+    <img class="movie-image" src="{{ movie.imgURL }}" alt="{{ movie.Title }}" />
+    <mat-card-actions>
+      <mat-icon
+        *ngIf="!isFavorite(movie)"
+        (click)="addToFavorites(movie); openAddFavMovieComponent(movie)"
+        >favorite_border</mat-icon
+      >
+      <mat-icon
+        *ngIf="isFavorite(movie)"
+        (click)="removeFromFavorites(movie); openRemoveFavMovieComponent(movie)"
+        >favorite</mat-icon
+      >
+    </mat-card-actions>
+  </mat-card>
+</div>

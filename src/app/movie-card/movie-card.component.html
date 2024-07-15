@@ -27,7 +27,21 @@
       >
         Description
       </button>
-      <mat-icon>favorite_border</mat-icon>
+      <mat-icon
+        *ngIf="!isFavorite(movie)"
+        (click)="addToFavorites(movie); openAddFavMovieDialog(movie)"
+        >favorite_border</mat-icon
+      >
+      <mat-icon
+        *ngIf="isFavorite(movie)"
+        (click)="removeFromFavorites(movie); openRemoveFavMovieDialog(movie)"
+        >favorite</mat-icon
+      >
     </mat-card-actions>
   </mat-card>
 </div>
+
+<app-profile
+  [favoriteMovies]="favoriteMovies"
+  (favoriteChanged)="onFavoriteChanged()"
+></app-profile>

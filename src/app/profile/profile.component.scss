@@ -1,0 +1,21 @@
+.mat-dialog-content {
+  max-height: 99vh;
+  overflow-y: auto;
+}
+
+.movies-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card {
+  margin-bottom: 15px;
+}
+
+.movie-image {
+  height: 400px;
+  width: 300px;
+
+  object-fit: cover;
+  margin: 0 20px;
+}

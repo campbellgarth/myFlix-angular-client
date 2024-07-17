@@ -141,11 +141,12 @@ export class MyflixService {
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
-  updateUser(userName: any): Observable<any> {
+  updateUser(userData: any): Observable<any> {
     //api call for update a user endpoint
     const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
     return this.http
-      .put(apiUrl + 'users/' + userName, {
+      .put(apiUrl + 'users/' + username, userData, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),

@@ -42,7 +42,7 @@ export class UserLoginFormComponent implements OnInit {
             // Store additional user data in localStorage if needed
             localStorage.setItem('username', userData.Username);
             localStorage.setItem('email', userData.Email);
-            localStorage.setItem('dateOfBirth', userData.DateOfBirth);
+            localStorage.setItem('birthday', userData.Birthday);
 
             this.dialogRef.close(); // This will close the modal on success!
             this.snackBar.open('Successfully logged in', 'OK', {

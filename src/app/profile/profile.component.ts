@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddFavMovieComponent } from '../add-fav-movie/add-fav-movie.component';
 import { RemoveFavMovieComponent } from '../remove-fav-movie/remove-fav-movie.component';
 import { MyflixService } from '../fetch-api-data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,11 @@ export class ProfileComponent implements OnInit {
   };
   user: any = {};
 
-  constructor(public dialog: MatDialog, public fetchApiData: MyflixService) {}
+  constructor(
+    public dialog: MatDialog,
+    public fetchApiData: MyflixService,
+    public snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadFavoriteMovies();
@@ -31,9 +36,9 @@ export class ProfileComponent implements OnInit {
   fetchUserData(): void {
     const username = localStorage.getItem('username');
     this.fetchApiData.getUser(username).subscribe((result: any) => {
-      result.username = result.user.username;
-      result.email = result.user.email;
-      result.dateOfBirth = result.user.dateOfBirth;
+      this.userData.username = result.Username;
+      this.userData.email = result.Email;
+      this.userData.birthday = result.Birthday;
     });
   }
 
@@ -71,6 +76,32 @@ export class ProfileComponent implements OnInit {
         'favoriteMovies',
         JSON.stringify(this.favoriteMovies)
       );
+    });
+  }
+  onSubmit(): void {
+    const updatedUser = {
+      Username: this.userData.username,
+      Password: this.userData.password,
+      Email: this.userData.email,
+      Birthday: this.userData.birthday,
+    };
+
+    this.fetchApiData.updateUser(updatedUser).subscribe({
+      next: (result) => {
+        localStorage.setItem('username', result.Username);
+        localStorage.setItem('email', result.Email);
+        localStorage.setItem('birthday', result.Birthday);
+
+        this.snackBar.open('Profile updated successfully', 'OK', {
+          duration: 2000,
+        });
+      },
+      error: (error) => {
+        console.error('Error updating user profile:', error);
+        this.snackBar.open('Error updating profile', 'OK', {
+          duration: 2000,
+        });
+      },
     });
   }
 }

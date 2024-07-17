@@ -37,11 +37,26 @@ export class UserLoginFormComponent implements OnInit {
         localStorage.setItem('user', JSON.stringify(result.user));
         localStorage.setItem('token', result.token);
 
-        this.dialogRef.close(); // This will close the modal on success!
-        this.snackBar.open('Successfully logged in', 'OK', {
-          duration: 2000,
+        this.fetchApiData.getUser(result.user.Username).subscribe({
+          next: (userData) => {
+            // Store additional user data in localStorage if needed
+            localStorage.setItem('username', userData.Username);
+            localStorage.setItem('email', userData.Email);
+            localStorage.setItem('dateOfBirth', userData.DateOfBirth);
+
+            this.dialogRef.close(); // This will close the modal on success!
+            this.snackBar.open('Successfully logged in', 'OK', {
+              duration: 2000,
+            });
+            this.router.navigate(['movies']);
+          },
+          error: (error) => {
+            console.error('Error fetching user data:', error);
+            this.snackBar.open('Error fetching user data', 'OK', {
+              duration: 2000,
+            });
+          },
         });
-        this.router.navigate(['movies']);
       },
       error: (result) => {
         this.snackBar.open(result, 'OK', {

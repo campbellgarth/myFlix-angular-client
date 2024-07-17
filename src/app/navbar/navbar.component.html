@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <span>myFlix</span>
+  <span class="spacer"></span>
+  <span class="spacer"></span>
+  <button
+    mat-button
+    [class.active]="isOnMovies()"
+    (click)="navigateToMoviesPage()"
+  >
+    Movies
+  </button>
+  <button
+    mat-button
+    [class.active]="isOnProfile()"
+    (click)="navigateToProfilePage()"
+  >
+    My Profile
+  </button>
+
+  <button mat-button (click)="navigateToWelcomePage()">Logout</button>
+</mat-toolbar>

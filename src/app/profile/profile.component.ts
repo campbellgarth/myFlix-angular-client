@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFavMovieComponent } from '../add-fav-movie/add-fav-movie.component';
 import { RemoveFavMovieComponent } from '../remove-fav-movie/remove-fav-movie.component';
+import { MyflixService } from '../fetch-api-data.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,10 +13,28 @@ export class ProfileComponent implements OnInit {
   @Input() favoriteMovies: any[] = [];
   @Output() favoriteChanged = new EventEmitter<void>(); //listens for changes to favoriteMovies
 
-  constructor(public dialog: MatDialog) {}
+  @Input() userData: any = {
+    username: '',
+    password: '',
+    email: '',
+    dateOfBirth: '',
+  };
+  user: any = {};
+
+  constructor(public dialog: MatDialog, public fetchApiData: MyflixService) {}
 
   ngOnInit(): void {
     this.loadFavoriteMovies();
+    this.fetchUserData();
+  }
+
+  fetchUserData(): void {
+    const username = localStorage.getItem('username');
+    this.fetchApiData.getUser(username).subscribe((result: any) => {
+      result.username = result.user.username;
+      result.email = result.user.email;
+      result.dateOfBirth = result.user.dateOfBirth;
+    });
   }
 
   loadFavoriteMovies(): void {
@@ -43,26 +62,15 @@ export class ProfileComponent implements OnInit {
     return this.favoriteMovies.some((favMovie) => favMovie._id === movie._id);
   }
 
-  addToFavorites(movie: any): void {
-    if (!this.isFavorite(movie)) {
-      //if a movie isn't favorited, push to array and set to local storage
-      this.favoriteMovies.push(movie);
+  removeFromFavorites(movie: any): void {
+    this.fetchApiData.deleteFavoriteMovie(movie).subscribe((res: any) => {
+      this.favoriteMovies = this.favoriteMovies.filter(
+        (favMovie) => favMovie._id !== movie._id
+      );
       localStorage.setItem(
         'favoriteMovies',
         JSON.stringify(this.favoriteMovies)
       );
-      this.favoriteChanged.emit(); //trigger the listener that favoriteMovies has changed
-    } else {
-      console.log(`${movie.Title} is already in your favorites!`);
-    }
-  }
-
-  removeFromFavorites(movie: any): void {
-    //filter out chosen movie from favoriteMovies array and reset local storage
-    this.favoriteMovies = this.favoriteMovies.filter(
-      (favMovie) => favMovie._id !== movie._id
-    );
-    localStorage.setItem('favoriteMovies', JSON.stringify(this.favoriteMovies));
-    this.favoriteChanged.emit(); //trigger listener that favoriteMovies has changed
+    });
   }
 }

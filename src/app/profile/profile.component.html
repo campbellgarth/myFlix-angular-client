@@ -1,3 +1,13 @@
+<app-navbar></app-navbar>
+
+<div class="user-profile">
+  <h2>User Profile</h2>
+  <div>
+    <p><strong>Username:</strong> {{ userData.username }}</p>
+    <p><strong>Email:</strong> {{ userData.email }}</p>
+    <p><strong>Date of Birth:</strong> {{ userData.dateOfBirth }}</p>
+  </div>
+</div>
 <div class="favorite-movies">
   <h2>Your Favorite Movies</h2>
   <mat-card *ngFor="let movie of favoriteMovies" class="movie-container">
@@ -7,11 +17,6 @@
     </mat-card-header>
     <img class="movie-image" src="{{ movie.imgURL }}" alt="{{ movie.Title }}" />
     <mat-card-actions>
-      <mat-icon
-        *ngIf="!isFavorite(movie)"
-        (click)="addToFavorites(movie); openAddFavMovieComponent(movie)"
-        >favorite_border</mat-icon
-      >
       <mat-icon
         *ngIf="isFavorite(movie)"
         (click)="removeFromFavorites(movie); openRemoveFavMovieComponent(movie)"

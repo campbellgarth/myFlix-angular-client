@@ -105,22 +105,25 @@ export class MyflixService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  addFavoriteMovie(userName: any, movie: any): Observable<any> {
+  addFavoriteMovie(movie: any): Observable<any> {
     //api call for adding a fave movie
+    const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
     return this.http
-      .post(apiUrl + 'users/' + userName + '/movies/' + movie, {
+      .post(apiUrl + 'users/' + userName + '/movie/' + movie._id, null, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
-  deleteFavoriteMovie(userName: any, movie: any): Observable<any> {
+
+  deleteFavoriteMovie(movie: any): Observable<any> {
     //api call for removing fav movie
+    const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
     return this.http
-      .delete(apiUrl + 'users/' + userName + '/movies/' + movie, {
+      .delete(apiUrl + 'users/' + userName + '/movie/' + movie._id, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),

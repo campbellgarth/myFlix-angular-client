@@ -84,10 +84,29 @@ export class MovieCardComponent implements OnInit {
   }
 
   addToFavorites(movie: any): void {
-    this.profileComponent.addToFavorites(movie);
+    if (!this.isFavorite(movie)) {
+      this.fetchApiData.addFavoriteMovie(movie).subscribe((res: any) => {
+        //if a movie isn't favorited, push to array and set to local storage
+        this.favoriteMovies.push(movie);
+        localStorage.setItem(
+          'favoriteMovies',
+          JSON.stringify(this.favoriteMovies)
+        );
+      });
+    } else {
+      console.log(`${movie.Title} is already in your favorites!`);
+    }
   }
 
   removeFromFavorites(movie: any): void {
-    this.profileComponent.removeFromFavorites(movie);
+    this.fetchApiData.deleteFavoriteMovie(movie).subscribe((res: any) => {
+      this.favoriteMovies = this.favoriteMovies.filter(
+        (favMovie) => favMovie._id !== movie._id
+      );
+      localStorage.setItem(
+        'favoriteMovies',
+        JSON.stringify(this.favoriteMovies)
+      );
+    });
   }
 }

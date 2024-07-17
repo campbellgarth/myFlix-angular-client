@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule } from '@angular/forms';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 import { UserLoginFormComponent } from './user-login-form/user-login-form.component';
@@ -27,6 +28,7 @@ import { DescriptionComponent } from './description/description.component';
 import { AddFavMovieComponent } from './add-fav-movie/add-fav-movie.component';
 import { RemoveFavMovieComponent } from './remove-fav-movie/remove-fav-movie.component';
 import { ProfileComponent } from './profile/profile.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
@@ -48,6 +50,7 @@ const appRoutes: Routes = [
     AddFavMovieComponent,
     RemoveFavMovieComponent,
     ProfileComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +61,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatIconModule,
     MatInputModule,
+    MatToolbarModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,

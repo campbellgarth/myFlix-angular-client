@@ -1,9 +1,10 @@
-<mat-toolbar color="primary">
-  <span>myFlix</span>
+<mat-toolbar>
+  <span class="nav-text">myFlix</span>
   <span class="spacer"></span>
   <span class="spacer"></span>
   <button
     mat-button
+    class="nav-text"
     [class.active]="isOnMovies()"
     (click)="navigateToMoviesPage()"
   >
@@ -11,11 +12,14 @@
   </button>
   <button
     mat-button
+    class="nav-text"
     [class.active]="isOnProfile()"
     (click)="navigateToProfilePage()"
   >
     My Profile
   </button>
 
-  <button mat-button (click)="navigateToWelcomePage()">Logout</button>
+  <button mat-button class="nav-text" (click)="navigateToWelcomePage()">
+    Logout
+  </button>
 </mat-toolbar>

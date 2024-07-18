@@ -1,0 +1,16 @@
+mat-toolbar {
+  background-color: #3a494d;
+  width: 100%;
+}
+
+.nav-text {
+  color: whitesmoke;
+}
+
+.mat-mdc-button:not(:disabled) {
+  color: whitesmoke;
+  margin: 12px;
+}
+.mat-mdc-button:not(:disabled):hover {
+  background-color: darken(whitesmoke, 10%);
+}

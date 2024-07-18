@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MyflixService } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DirectorComponent } from '../director/director.component';
@@ -15,15 +15,21 @@ import { ProfileComponent } from '../profile/profile.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
-  favoriteMovies: any[] = [];
+  favoriteMovies: string[] = []; // Adjusted type to string[] for storing movie IDs
+  @Input() userData: any = {
+    username: '',
+    favoriteMovies: [], // Correct property name here
+  };
 
   @ViewChild(ProfileComponent) profileComponent!: ProfileComponent; //gets a reference to profile component so that it can call methods and properties of it
 
   constructor(public fetchApiData: MyflixService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
+    this.fetchUserData().then(() => {
+      this.loadFavoriteMovies();
+    });
     this.getMovies();
-    this.loadFavoriteMovies();
   }
 
   onFavoriteChanged(): void {
@@ -73,6 +79,31 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  fetchUserData(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const username = localStorage.getItem('username');
+      if (username) {
+        this.fetchApiData.getUser(username).subscribe(
+          (result: any) => {
+            console.log(result); // Inspect the response structure
+            this.userData.favoriteMovies = result.FavoriteMovie || []; // Correct property name
+            localStorage.setItem(
+              'favoriteMovies',
+              JSON.stringify(this.userData.favoriteMovies)
+            );
+            resolve();
+          },
+          (error) => {
+            console.error(error);
+            reject(error);
+          }
+        );
+      } else {
+        resolve(); // In case there is no username in localStorage
+      }
+    });
+  }
+
   loadFavoriteMovies(): void {
     this.favoriteMovies = JSON.parse(
       localStorage.getItem('favoriteMovies') || '[]'
@@ -80,28 +111,24 @@ export class MovieCardComponent implements OnInit {
   }
 
   isFavorite(movie: any): boolean {
-    return this.favoriteMovies.some((favMovie) => favMovie._id === movie._id);
+    // Checks if a movie's ID is in the favoriteMovies array
+    return this.favoriteMovies.includes(movie._id);
   }
 
   addToFavorites(movie: any): void {
-    if (!this.isFavorite(movie)) {
-      this.fetchApiData.addFavoriteMovie(movie).subscribe((res: any) => {
-        //if a movie isn't favorited, push to array and set to local storage
-        this.favoriteMovies.push(movie);
-        localStorage.setItem(
-          'favoriteMovies',
-          JSON.stringify(this.favoriteMovies)
-        );
-      });
-    } else {
-      console.log(`${movie.Title} is already in your favorites!`);
-    }
+    this.fetchApiData.addFavoriteMovie(movie).subscribe((res: any) => {
+      this.favoriteMovies.push(movie._id); // Save only the movie ID
+      localStorage.setItem(
+        'favoriteMovies',
+        JSON.stringify(this.favoriteMovies)
+      );
+    });
   }
 
   removeFromFavorites(movie: any): void {
     this.fetchApiData.deleteFavoriteMovie(movie).subscribe((res: any) => {
       this.favoriteMovies = this.favoriteMovies.filter(
-        (favMovie) => favMovie._id !== movie._id
+        (favMovieId) => favMovieId !== movie._id
       );
       localStorage.setItem(
         'favoriteMovies',

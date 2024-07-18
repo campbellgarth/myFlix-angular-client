@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProfileComponent implements OnInit {
   @Input() favoriteMovies: any[] = [];
-  @Output() favoriteChanged = new EventEmitter<void>(); //listens for changes to favoriteMovies
+  favoriteMovieTitles: any[] = []; // New array to store favorite movie details
 
   @Input() userData: any = {
     username: '',
@@ -29,29 +29,32 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadFavoriteMovies();
     this.fetchUserData();
   }
 
   fetchUserData(): void {
     const username = localStorage.getItem('username');
-    this.fetchApiData.getUser(username).subscribe((result: any) => {
-      this.userData.username = result.Username;
-      this.userData.email = result.Email;
-      this.userData.birthday = result.Birthday;
-    });
+    if (username) {
+      this.fetchApiData.getUser(username).subscribe(
+        (result: any) => {
+          this.userData.username = result.Username;
+          this.userData.email = result.Email;
+          this.userData.birthday = result.Birthday;
+          this.favoriteMovies = result.FavoriteMovie || []; // Correct property name
+          this.loadFavoriteMovies();
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    }
   }
 
   loadFavoriteMovies(): void {
-    this.favoriteMovies = JSON.parse(
-      localStorage.getItem('favoriteMovies') || '[]'
-    );
-  }
-
-  openAddFavMovieComponent(movie: any): void {
-    this.dialog.open(AddFavMovieComponent, {
-      width: '500px',
-      data: { movie },
+    this.fetchApiData.getAllMovies().subscribe((allMovies: any[]) => {
+      this.favoriteMovieTitles = allMovies.filter((movie) =>
+        this.favoriteMovies.includes(movie._id)
+      );
     });
   }
 
@@ -63,21 +66,23 @@ export class ProfileComponent implements OnInit {
   }
 
   isFavorite(movie: any): boolean {
-    //checks if a movie is a favoriteMovie
-    return this.favoriteMovies.some((favMovie) => favMovie._id === movie._id);
+    // Checks if a movie's ID is in the favoriteMovies array
+    return this.favoriteMovies.includes(movie._id);
   }
 
   removeFromFavorites(movie: any): void {
     this.fetchApiData.deleteFavoriteMovie(movie).subscribe((res: any) => {
       this.favoriteMovies = this.favoriteMovies.filter(
-        (favMovie) => favMovie._id !== movie._id
+        (favMovieId) => favMovieId !== movie._id
       );
       localStorage.setItem(
         'favoriteMovies',
         JSON.stringify(this.favoriteMovies)
       );
+      this.loadFavoriteMovies(); // Refresh favorite movies
     });
   }
+
   onSubmit(): void {
     const updatedUser = {
       Username: this.userData.username,

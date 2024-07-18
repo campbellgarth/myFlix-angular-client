@@ -9,24 +9,39 @@ import { MyflixService } from '../fetch-api-data.service';
 
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+/**
+ * Component for the user registration form.
+ */
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
   styleUrls: ['./user-registration-form.component.scss'],
 })
 export class UserRegistrationFormComponent implements OnInit {
+  /**
+   * User data to be bound to the form.
+   * @type {{ Username: string, Password: string, Email: string, Birthday: string }}
+   */
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
-
+  /**
+   * Creates an instance of UserRegistrationFormComponent.
+   * @param fetchApiData - Service for API calls.
+   * @param dialogRef - Reference to the dialog opened.
+   * @param snackBar - Service for displaying notifications.
+   */
   constructor(
     public fetchApiData: MyflixService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
     public snackBar: MatSnackBar
   ) {}
-
+  /**
+   * Lifecycle hook that is called after the component is initialized.
+   */
   ngOnInit(): void {}
 
-  // This is the function responsible for sending the form inputs to the backend
+  /**
+   * Sends the form inputs to the backend for user registration.
+   */
   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe({
       next: (result) => {

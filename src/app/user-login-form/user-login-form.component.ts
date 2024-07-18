@@ -10,25 +10,41 @@ import { MyflixService } from '../fetch-api-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //this import is used to redirect users to the movie page after login
 import { Router } from '@angular/router';
-
+/**
+ * Component for the user login form.
+ */
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
   styleUrls: ['./user-login-form.component.scss'],
 })
 export class UserLoginFormComponent implements OnInit {
+  /**
+   * User data to be bound to the form.
+   * @type {{ Username: string, Password: string, Email: string, Birthday: string }}
+   */
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
-
+  /**
+   * Creates an instance of UserLoginFormComponent.
+   * @param fetchApiData - Service for API calls.
+   * @param dialogRef - Reference to the dialog opened.
+   * @param snackBar - Service for displaying notifications.
+   * @param router - Service for navigating the user to different pages.
+   */
   constructor(
     public fetchApiData: MyflixService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
     public snackBar: MatSnackBar,
     private router: Router
   ) {}
-
+  /**
+   * Lifecycle hook that is called after the component is initialized.
+   */
   ngOnInit(): void {}
 
-  // This is the function responsible for sending the form inputs to the backend
+  /**
+   * Sends the form inputs to the backend for user login.
+   */
   loginUser(): void {
     this.fetchApiData.userLogin(this.userData).subscribe({
       next: (result) => {

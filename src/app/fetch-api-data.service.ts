@@ -1,3 +1,6 @@
+/**
+ *MyflixService provides methods to interact with the Myflix API.
+ */
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import {
@@ -14,10 +17,17 @@ const apiUrl = 'https://myflixmovies-72c1f6d2bace.herokuapp.com/';
   providedIn: 'root',
 })
 export class MyflixService {
-  // Inject the HttpClient module to the constructor params
-  // This will provide HttpClient to the entire class, making it available via this.http
+  /**
+   * Injects the HttpClient module to the constructor params.
+   * This will provide HttpClient to the entire class, making it available via this.http.
+   * @param http - The HttpClient instance.
+   */
   constructor(private http: HttpClient) {}
-  // Making the api call for the user registration endpoint
+  /**
+   * Makes the API call for the user registration endpoint.
+   * @param userDetails - The details of the user to register.
+   * @returns An Observable of the HTTP response.
+   */
   public userRegistration(userDetails: any): Observable<any> {
     return this.http
       .post(apiUrl + 'users', userDetails)
@@ -25,7 +35,11 @@ export class MyflixService {
   }
 
   public userLogin(userDetails: any): Observable<any> {
-    //api call for login endpoint
+    /**
+     * Makes the API call for the user login endpoint.
+     * @param userDetails - The details of the user to login.
+     * @returns An Observable of the HTTP response.
+     */
 
     return this.http
       .post(apiUrl + 'login', userDetails)
@@ -33,7 +47,10 @@ export class MyflixService {
   }
 
   getAllMovies(): Observable<any> {
-    //api call for getallmovies endpoint
+    /**
+     * Makes the API call for the get all movies endpoint
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'movies', {
@@ -45,7 +62,11 @@ export class MyflixService {
   }
 
   getOneMovie(movieTitle: any): Observable<any> {
-    //api call for getonemovie endpoint
+    /**
+     * Makes the API call for the get one movie by title endpoint.
+     * @param movieTitle - The title of the requested movie.
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'movies/' + movieTitle, {
@@ -57,7 +78,11 @@ export class MyflixService {
   }
 
   getDirector(directorName: any): Observable<any> {
-    //api call for get a director endpoint
+    /**
+     * Makes the API call for the get director by name endpoint.
+     * @param directorName - The name of the requested director.
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'movies/directors/' + directorName, {
@@ -69,7 +94,11 @@ export class MyflixService {
   }
 
   getGenre(genreName: any): Observable<any> {
-    //api call for get a genre endpoint
+    /**
+     * Makes the API call for the get genre by name endpoint.
+     * @param genreName - The name of the requested genre.
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'movies/genres/' + genreName, {
@@ -81,7 +110,11 @@ export class MyflixService {
   }
 
   getUser(userName: any): Observable<any> {
-    //api call for get a user endpoint
+    /**
+     * Makes the API call for the get user by username endpoint.
+     * @param userName - The username of the requested user.
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'users/' + userName, {
@@ -93,7 +126,12 @@ export class MyflixService {
   }
 
   getFavoriteMovies(userName: any, favoriteMovies: any): Observable<any> {
-    //api call for get a user's favorite movies
+    /**
+     * Makes the API call for the get user's favorite movies endpoint.
+     * @param userName - The username of the requested user.
+     * @param favoriteMovies - The list of favorite movies for that user
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .get(apiUrl + 'users/' + userName + '/' + favoriteMovies, {
@@ -105,7 +143,11 @@ export class MyflixService {
   }
 
   addFavoriteMovie(movie: any): Observable<any> {
-    //api call for adding a fave movie
+    /**
+     * Makes the API call for the add favorite movie endpoint.
+     * @param movie - The movie to favorite.
+     * @returns An Observable of the HTTP response.
+     */
     const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
     return this.http
@@ -118,7 +160,11 @@ export class MyflixService {
   }
 
   deleteFavoriteMovie(movie: any): Observable<any> {
-    //api call for removing fav movie
+    /**
+     * Makes the API call for the remove favorite movie endpoint.
+     * @param movie - The movie to remove from favorites.
+     * @returns An Observable of the HTTP response.
+     */
     const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
     return this.http
@@ -130,7 +176,11 @@ export class MyflixService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
   deleteUser(userName: any): Observable<any> {
-    //api call for delete a user endpoint
+    /**
+     * Makes the API call for the delete user by username endpoint.
+     * @param userName - The username of the requested user to delete.
+     * @returns An Observable of the HTTP response.
+     */
     const token = localStorage.getItem('token');
     return this.http
       .delete(apiUrl + 'users/' + userName, {
@@ -141,6 +191,11 @@ export class MyflixService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
   updateUser(userData: any): Observable<any> {
+    /**
+     * Makes the API call for the update user endpoint.
+     * @param userData - The new data for the user.
+     * @returns An Observable of the HTTP response.
+     */
     //api call for update a user endpoint
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
@@ -152,12 +207,20 @@ export class MyflixService {
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
-  // Non-typed response extraction
+  /**
+   * Extracts response data from the HTTP response.
+   * @param res - The HTTP response
+   * @returns The response body or an empty object.
+   */
   private extractResponseData(res: any): any {
     const body = res;
     return body || {};
   }
-
+  /**
+   * Handles errors
+   * @param error - The HTTP error response.
+   * @returns An observable error message.
+   */
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('Some error occurred:', error.error.message);

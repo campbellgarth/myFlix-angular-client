@@ -1,6 +1,21 @@
-# MyFlixAngularClients
+# MyFlixAngularClient
 
+The myFlix app is reimagined with Angular. See the [React App](https://myflixmovies-db.netlify.app/login)
+
+See the [myFlix API](https://github.com/campbellgarth/myFlix)
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.14.
+
+Find this project on [Github Pages](https://campbellgarth.github.io/myflix-angular/welcome)
+
+## Key Features
+
+● Users are able to login or register for an account from the home page.
+
+● Once authenticated, the user can view all movies. Each movie has information about the genre, director, and movie description.
+
+● Users are able to add or remove movies from their favorites list, which will appear on their profile.
+
+● Users are able to edit their profile information.
 
 ## Development server
 

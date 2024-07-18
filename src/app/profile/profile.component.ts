@@ -11,8 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  @Input() favoriteMovies: any[] = [];
-  favoriteMovieTitles: any[] = []; // New array to store favorite movie details
+  @Input() favoriteMovies: any[] = []; //this array stores favorite movies as movie ids
+  favoriteMovieTitles: any[] = []; // New array to store favorite movie details as movie objects
 
   @Input() userData: any = {
     username: '',
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit {
           this.userData.username = result.Username;
           this.userData.email = result.Email;
           this.userData.birthday = result.Birthday;
-          this.favoriteMovies = result.FavoriteMovie || []; // Correct property name
+          this.favoriteMovies = result.FavoriteMovie || [];
           this.loadFavoriteMovies();
         },
         (error) => {
@@ -52,8 +52,10 @@ export class ProfileComponent implements OnInit {
 
   loadFavoriteMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((allMovies: any[]) => {
-      this.favoriteMovieTitles = allMovies.filter((movie) =>
-        this.favoriteMovies.includes(movie._id)
+      this.favoriteMovieTitles = allMovies.filter(
+        (
+          movie //filters all movies by those in favoriteMovies but keeps them as objects
+        ) => this.favoriteMovies.includes(movie._id)
       );
     });
   }

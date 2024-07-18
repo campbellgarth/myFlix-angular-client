@@ -15,10 +15,10 @@ import { ProfileComponent } from '../profile/profile.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
-  favoriteMovies: string[] = []; // Adjusted type to string[] for storing movie IDs
+  favoriteMovies: string[] = []; // stores movie IDs
   @Input() userData: any = {
     username: '',
-    favoriteMovies: [], // Correct property name here
+    favoriteMovies: [],
   };
 
   @ViewChild(ProfileComponent) profileComponent!: ProfileComponent; //gets a reference to profile component so that it can call methods and properties of it
@@ -80,12 +80,12 @@ export class MovieCardComponent implements OnInit {
   }
 
   fetchUserData(): Promise<void> {
+    //does not set favorite movies until user data is loaded
     return new Promise<void>((resolve, reject) => {
       const username = localStorage.getItem('username');
       if (username) {
         this.fetchApiData.getUser(username).subscribe(
           (result: any) => {
-            console.log(result); // Inspect the response structure
             this.userData.favoriteMovies = result.FavoriteMovie || []; // Correct property name
             localStorage.setItem(
               'favoriteMovies',
